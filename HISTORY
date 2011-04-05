@@ -1,3 +1,8 @@
+Version 0.1.0 - April 05, 2011
+===============================
+* Use ruby CSV
+* Refactor
+
 Version 0.0.2 - August 05, 2007
 ===============================
 * Type-casting: pass the option :raw => false to the quotes method to get columns converted from string to specific types (mostly float, date, time and datetime)
