@@ -1,9 +1,19 @@
 require 'open-uri'
 require 'ostruct'
+if RUBY_VERSION >= "1.9"
+  require 'csv'
+else
+  require 'rubygems'
+  require 'fastercsv'
+  class Object
+    CSV = FCSV
+    alias_method :CSV, :FCSV
+  end
+end
 
  class YahooFinance
   
-   VERSION = '0.0.2'
+   VERSION = '0.1.0'
 
    COLUMNS = {
      :ask => ["a", :float],
@@ -102,98 +112,49 @@ require 'ostruct'
     :dividends_only => "v"
   }
 
-  ROWS_PER_REQUEST = 50
+  SYMBOLS_PER_REQUEST = 50
 
   # retrieve the quote data (an OpenStruct per quote)
   # the options param can be used to specify the following attributes:
   # :raw - if true, each column will be converted (to numbers, dates, etc)
-  def self.quotes(symbols_array, columns_array = [:symbol, :last_trade_price, :last_trade_date, :change, :previous_close], options = { :raw => true })
-     ret = []
-     cols = columns_array.collect { |c| COLUMNS[c][0] }.join
-     types = columns_array.collect { |c| COLUMNS[c][1] }.join if options[:raw]
-
-     i = 0
-     k = 0
-     while i < symbols_array.size
-       subset = symbols_array[i..i+ROWS_PER_REQUEST]
-       symb_str = subset.collect { |s| "#{s}" }.join("+")
-
-       lines = read_lines(symb_str, cols)
-       for line in lines
-         ret << extract_data(line, symbols_array[k], columns_array, options)
-         k+=1
-       end
-
-       i += ROWS_PER_REQUEST+1
-     end
-
-     return ret
+  def self.quotes(symbols_array, columns_array = [:symbol, :last_trade_price, :last_trade_date, :change, :previous_close], options = { })
+    options[:raw] ||= true
+    ret = []
+    symbols_array.each_slice(SYMBOLS_PER_REQUEST) do |symbols|
+      read_symbols(symbols.join("+"), columns_array).map do |row|
+        ret << OpenStruct.new(row.to_hash)
+      end
+    end
+    ret
   end
   
-  def self.historical_quotes(symbol, start_date, end_date, options = { :raw => true, :period => :daily })
-     options[:period] ||= :daily
-     lines = read_historical(symbol, start_date, end_date, options)
-     ret = []
-     
-     if options[:period] == :dividends_only
-       cols = [:dividend_pay_date, :dividend_yield]
-     else
-       cols = [:trade_date, :open, :high, :low, :close, :volume, :adjusted_close]
-     end
-     
-     for line in lines
-         ret << extract_data(line, symbol, cols, options)        
-     end
-     
-     return ret
+  def self.historical_quotes(symbol, start_date, end_date, options = {})
+    options[:raw] ||= true
+    options[:period] ||= :daily
+    read_historical(symbol, start_date, end_date, options).map do |row|
+      OpenStruct.new(row.to_hash.merge(:symbol => symbol))
+    end
   end
   
   private
   
-  def self.extract_data(raw_line, symbol, columns_array, options)
-     datamap = {}
-     datamap[:symbol] = symbol
-     data = raw_line.split(',')
+  def self.read_symbols(symb_str, cols)
+     conn = open("http://finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{cols.map {|col| COLUMNS[col].first }}")
+     CSV.parse(conn.read, :headers => cols)
+  end
 
-     for j in (0..data.size-1)
-       if !options[:raw]
-         datamap[columns_array[j]] = format(data[j], COLUMNS[columns_array[j]][1])
-       else
-         datamap[columns_array[j]] = data[j]
-       end
-     end
-
-     OpenStruct.new(datamap)
-  end
-  
-  def self.format(str, type)
-    case type
-      when :float then str.to_f
-      when :integer then str.to_i
-      #when :date then DateTime::parse(str)
-      #when :time then Time.parse(str)
-    else str
-    end
-  end
-  
-  def self.read_lines(symb_str, cols)
-     conn = open("http://finance.yahoo.com/d/quotes.csv?s=#{symb_str}&f=#{cols}")
-     lines = conn.read
-     
-     lines.split("\r\n")
-  end
-  
   def self.read_historical(symbol, start_date, end_date, options)
-     url = "http://ichart.finance.yahoo.com/table.csv?s=#{symbol}&d=#{end_date.month-1}&e=#{end_date.day}&f=#{end_date.year}&g=#{HISTORICAL_MODES[options[:period]]}&a=#{start_date.month-1}&b=#{start_date.day}&c=#{start_date.year}&ignore=.csv"
-     begin
-       conn = open(url) 
-     rescue
-       return []
-     end
-     lines = conn.read
-
-     all_lines = lines.split("\n")
-     return all_lines[1..all_lines.size-1]
+     url = "http://ichart.finance.yahoo.com/table.csv?s=#{URI.escape(symbol)}&d=#{end_date.month-1}&e=#{end_date.day}&f=#{end_date.year}&g=#{HISTORICAL_MODES[options[:period]]}&a=#{start_date.month-1}&b=#{start_date.day}&c=#{start_date.year}&ignore=.csv"
+     conn = open(url)
+     cols =
+       if options[:period] == :dividends_only
+         [:dividend_pay_date, :dividend_yield]
+       else
+         [:trade_date, :open, :high, :low, :close, :volume, :adjusted_close]
+       end
+     result = CSV.parse(conn.read, :headers => cols) #:first_row, :header_converters => :symbol)
+     result.delete(0)  # drop returned header
+     result
   end
-  
+
  end
