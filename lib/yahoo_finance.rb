@@ -139,7 +139,8 @@ end
   private
   
   def self.read_symbols(symb_str, cols)
-     conn = open("http://finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{cols.map {|col| COLUMNS[col] }}")
+     columns = "#{cols.map {|col| COLUMNS[col] }.join('')}"
+     conn = open("http://finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")
      CSV.parse(conn.read, :headers => cols)
   end
 
