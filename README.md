@@ -1,26 +1,32 @@
-Ruby's Yahoo Finance Wrapper
-============================
-
+# Ruby's Yahoo Finance Wrapper
 A dead simple wrapper for yahoo finance quotes end-point.
 
-Usage:
+## Usage:
 
-1 - Getting latest quotes for a set of symbols
-----------------------------------------------
-Just pass an array of symbols (stock names, indexes, exchange rates) and a list of fields you want:
+### Getting latest quotes for a set of symbols
 
+Pass an array of valid symbols (stock names, indexes, exchange rates) and a list of fields you want:
+
+```ruby
 data = YahooFinance.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date])
-# ask will be a string here:
-puts data[0].symbol + " value is: " + data[0].ask 
+```
 
-Or optionally:
+Data is now an array of results. You now have accessor methods to retrieve the data, with the return results being strings:
 
-data = YahooFinance.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date], { :raw => false } )
-# ask will be a float here:
+```ruby
 puts data[0].symbol + " value is: " + data[0].ask 
+```
+
+Passing `raw: false` will return numerical values
+
+```ruby
+data = YahooFinance.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date], { raw: false } )
+data[0].ask # This is now a float
+```
 
 The full list of fields follows:
 
+``` ruby
      :ask
      :average_daily_volume
      :ask_size
@@ -107,23 +113,23 @@ The full list of fields follows:
      :day_value_change_realtime 
      :stock_exchange 
      :dividend_yield 
+```
 
-
-2 - Getting historical quotes
------------------------------
+### Getting historical quotes
 
 Here you can specify a date range and a symbol, and retrieve historical data for it. 
 The last parameter (options) can include, besides the "raw" option, a "period" option.
 The period can be specified as :daily, :monthly, :weekly or :dividends_only
 
+```ruby
 data = YahooFinance.historical_quotes("BVSP", Time::now-(24*60*60*10), Time::now) # 10 days worth of data
+```
 
 or
 
-data = YahooFinance.historical_quotes("BVSP", Time::now-(24*60*60*10), Time::now, { :raw => false, :period => :monthly })
-
-
-
+``` ruby
+data = YahooFinance.historical_quotes("BVSP", Time::now-(24*60*60*10), Time::now, { raw: false, period: :monthly })
+```
 
 
 Enjoy! :-)
