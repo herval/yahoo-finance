@@ -33,8 +33,9 @@ class TestYahoo_finance_test < Test::Unit::TestCase
     end
      
     assert_nothing_raised do
-     q = YahooFinance.quotes(["AAPL", "MSFT", "BVSP", "JPYUSD" ], YahooFinance::COLUMNS.keys.collect{ |c| YahooFinance::COLUMNS[c][1] == :undefined ? c : nil }.compact[0..20], { :raw => false })
-     #q.each { |q1| p q1 }
+      YahooFinance.quotes(["AAPL", "MSFT", "BVSP", "JPYUSD" ],
+                          YahooFinance::COLUMNS.take(20).collect { |k, v| v },
+                          { raw: false })
     end
   end
 
