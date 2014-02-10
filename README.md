@@ -1,6 +1,14 @@
 # Ruby's Yahoo Finance Wrapper
 A dead simple wrapper for yahoo finance quotes end-point.
 
+## Installation:
+
+`gem install 'yahoo-finance'`
+`require 'yahoo_finance'`
+
+If using bundler: 
+`gem 'yahoo-finance', require: 'yahoo_finance'`
+
 ## Usage:
 
 ### Getting latest quotes for a set of symbols
