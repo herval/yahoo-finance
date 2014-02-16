@@ -1,21 +1,9 @@
 #!/usr/bin/ruby
-
-# yahoo_finance_test.rb
-# August 5, 2007
-#
-
 require 'test/unit'
 require File.join(File.dirname(__FILE__),'../lib/yahoo_finance')
 
 class TestYahoo_finance_test < Test::Unit::TestCase
-#  def setup
-#  end
-#
-#  def teardown
-#  end
-
   def test_quotes
-
     quotes = YahooFinance.quotes(["BVSP", "AAPL"])
     assert_equal(2, quotes.size)
     
@@ -52,5 +40,14 @@ class TestYahoo_finance_test < Test::Unit::TestCase
     quotes = YahooFinance.quotes(["GOOG"], [:name])
     assert_no_match /^\"/, quotes.first.name
   end
-    
+
+  def test_symbols
+    symbols = YahooFinance.symbols("yahoo")
+    assert_equal(10, symbols.size)
+
+    assert_nothing_raised do
+      symbols.first.symbol
+      symbols.first.name
+    end
+  end
 end

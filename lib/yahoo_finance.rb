@@ -1,5 +1,7 @@
 require 'open-uri'
 require 'ostruct'
+require 'json'
+
 if RUBY_VERSION >= "1.9"
   require 'csv'
 else
@@ -121,7 +123,7 @@ end
     options[:raw] ||= true
     ret = []
     symbols_array.each_slice(SYMBOLS_PER_REQUEST) do |symbols|
-      read_symbols(symbols.join("+"), columns_array).map do |row|
+      read_quotes(symbols.join("+"), columns_array).map do |row|
         ret << OpenStruct.new(row.to_hash)
       end
     end
@@ -135,10 +137,18 @@ end
       OpenStruct.new(row.to_hash.merge(:symbol => symbol))
     end
   end
+
+  def self.symbols(query)
+    ret = []
+    read_symbols(query).each do |row|
+      ret << OpenStruct.new(row)
+    end
+    ret
+  end
   
   private
   
-  def self.read_symbols(symb_str, cols)
+  def self.read_quotes(symb_str, cols)
      columns = "#{cols.map {|col| COLUMNS[col] }.join('')}"
      conn = open("http://download.finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")
      CSV.parse(conn.read, :headers => cols)
@@ -156,6 +166,14 @@ end
      result = CSV.parse(conn.read, :headers => cols) #:first_row, :header_converters => :symbol)
      result.delete(0)  # drop returned header
      result
+  end
+
+  def self.read_symbols(query)
+     conn = open("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}&callback=YAHOO.Finance.SymbolSuggest.ssCallback")
+     result = conn.read
+     result.sub!('YAHOO.Finance.SymbolSuggest.ssCallback(', '').chomp!(')')
+     json_result = JSON.parse(result)
+     json_result["ResultSet"]["Result"]
   end
 
  end
