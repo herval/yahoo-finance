@@ -43,7 +43,7 @@ The full list of fields follows:
      :bid_real_time
      :book_value b4
      :bid_size b6
-     :chance_and_percent_change
+     :change_and_percent_change
      :change
      :comission
      :change_real_time

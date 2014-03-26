@@ -26,7 +26,7 @@ end
      :bid_real_time => "b3",
      :book_value => "b4",
      :bid_size => "b6",
-     :chance_and_percent_change => "c",
+     :change_and_percent_change => "c",
      :change => "c1",
      :comission => "c3",
      :change_real_time => "c6",
