@@ -11,6 +11,6 @@ spec = Gem::Specification.new do |s|
   s.files = ["lib/yahoo_finance.rb", "lib/yahoo-finance.rb"]
   s.require_path = "lib"
   s.has_rdoc = false
-  s.extra_rdoc_files = ["README", "HISTORY"]
+  s.extra_rdoc_files = ["README.md", "HISTORY"]
   s.add_runtime_dependency("fastercsv") if RUBY_VERSION < "1.9"
 end
