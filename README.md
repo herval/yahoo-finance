@@ -41,8 +41,8 @@ The full list of fields follows:
      :bid
      :ask_real_time
      :bid_real_time
-     :book_value b4
-     :bid_size b6
+     :book_value
+     :bid_size
      :chance_and_percent_change
      :change
      :comission
