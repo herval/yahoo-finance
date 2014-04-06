@@ -83,7 +83,7 @@ end
      :price_per_sales => "p5",
      :price_per_book => "p6",
      :ex_dividend_date => "q",
-     :pe_ratio => "r0",
+     :pe_ratio => "r",
      :dividend_pay_date => "r1",
      :pe_ratio_realtime => "r2",
      :peg_ratio => "r5",
