@@ -130,13 +130,19 @@ The last parameter (options) can include, besides the "raw" option, a "period" o
 The period can be specified as :daily, :monthly, :weekly or :dividends_only
 
 ```ruby
-data = YahooFinance.historical_quotes("BVSP", Time::now-(24*60*60*10), Time::now) # 10 days worth of data
+data = YahooFinance.historical_quotes("AAPL") # entire historical data
+```
+
+or
+
+```ruby
+data = YahooFinance.historical_quotes("AAPL", { start_date: Time::now-(24*60*60*10), end_date: Time::now }) # 10 days worth of data
 ```
 
 or
 
 ``` ruby
-data = YahooFinance.historical_quotes("BVSP", Time::now-(24*60*60*10), Time::now, { raw: false, period: :monthly })
+data = YahooFinance.historical_quotes("AAPL", { raw: false, period: :monthly })
 ```
 
 ### Getting splits
