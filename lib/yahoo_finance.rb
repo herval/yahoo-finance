@@ -145,6 +145,15 @@ end
     end
     ret
   end
+
+  def self.splits(symbol, options = {})
+    rows = read_splits(symbol, options).select{|row| row[0] == 'SPLIT'}
+    rows.map do |row|
+      type, date, value = row
+      after, before = value.split(':')
+      OpenStruct.new(:symbol => symbol, :date => Date.strptime(date.strip, '%Y%m%d'), :before => before.to_i, :after => after.to_i)
+    end
+  end
   
   private
   
@@ -166,6 +175,27 @@ end
      result = CSV.parse(conn.read, :headers => cols) #:first_row, :header_converters => :symbol)
      result.delete(0)  # drop returned header
      result
+  end
+
+  def self.read_splits(symbol, options)
+     params = {
+       :s => URI.escape(symbol),
+       :g => 'v'
+     }
+     if options[:start_date]
+       params[:a] = options[:start_date].month-1
+       params[:b] = options[:start_date].day
+       params[:c] = options[:start_date].year
+     end
+     if options[:end_date]
+       params[:d] = options[:end_date].month-1
+       params[:e] = options[:end_date].day
+       params[:f] = options[:end_date].year
+     end
+
+     url = "http://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
+     conn = open(url)
+     CSV.parse(conn.read)
   end
 
   def self.read_symbols(query)
