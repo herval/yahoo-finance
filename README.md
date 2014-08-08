@@ -139,6 +139,17 @@ or
 data = YahooFinance.historical_quotes("BVSP", Time::now-(24*60*60*10), Time::now, { raw: false, period: :monthly })
 ```
 
+### Getting splits
+
+You can also retrieve split data.
+
+```ruby
+data = YahooFinance.splits('AAPL', :start_date => Date.today - 10*365)
+data[0].date   # Date<2014-06-09>
+data[0].before # 1
+data[0].after  # 7
+```
+
 
 Enjoy! :-)
 
