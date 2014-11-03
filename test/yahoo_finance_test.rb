@@ -3,6 +3,14 @@ require 'test/unit'
 require File.join(File.dirname(__FILE__),'../lib/yahoo_finance')
 
 class TestYahoo_finance_test < Test::Unit::TestCase
+  def test_quote
+    columns = [:open, :high, :low, :close, :volume, :last_trade_price]
+    quote = YahooFinance.quote("AAPL", columns)
+    columns.each do |col|
+      assert quote.send(col), "quote.#{col} was nil: #{quote}"
+    end
+  end
+
   def test_quotes
     quotes = YahooFinance.quotes(["BVSP", "AAPL"])
     assert_equal(2, quotes.size)
