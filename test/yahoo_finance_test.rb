@@ -27,6 +27,13 @@ class TestYahoo_finance_test < Test::Unit::TestCase
     end
   end
 
+  def test_splits
+    s = YahooFinance.splits('AAPL')
+    assert s.first.date
+    assert s.first.before
+    assert s.first.after
+  end
+
   def test_escapes_symbol_for_url
     assert_nothing_raised do
       YahooFinance.quotes(["^AXJO"])
