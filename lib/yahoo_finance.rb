@@ -130,19 +130,7 @@ end
     ret
   end
 
-  def self.historical_quotes(symbol, start_date=nil, end_date=nil, options = {})
-    if start_date.respond_to?(:to_hash)
-      options = start_date
-    else
-      options[:start_date] ||= start_date
-    end
-
-    if end_date.respond_to?(:to_hash)
-      options = end_date
-    else
-      options[:end_date] ||= end_date
-    end
-
+  def self.historical_quotes(symbol, options = {})
     options[:raw] ||= true
     options[:period] ||= :daily
     read_historical(symbol, options).map do |row|
