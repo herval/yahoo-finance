@@ -129,11 +129,11 @@ end
     end
     ret
   end
-  
-  def self.historical_quotes(symbol, start_date, end_date, options = {})
+
+  def self.historical_quotes(symbol, options = {})
     options[:raw] ||= true
     options[:period] ||= :daily
-    read_historical(symbol, start_date, end_date, options).map do |row|
+    read_historical(symbol, options).map do |row|
       OpenStruct.new(row.to_hash.merge(:symbol => symbol))
     end
   end
@@ -163,8 +163,24 @@ end
      CSV.parse(conn.read, :headers => cols)
   end
 
-  def self.read_historical(symbol, start_date, end_date, options)
-     url = "http://ichart.finance.yahoo.com/table.csv?s=#{URI.escape(symbol)}&d=#{end_date.month-1}&e=#{end_date.day}&f=#{end_date.year}&g=#{HISTORICAL_MODES[options[:period]]}&a=#{start_date.month-1}&b=#{start_date.day}&c=#{start_date.year}&ignore=.csv"
+  def self.read_historical(symbol, options)
+     params = {
+       :s => URI.escape(symbol),
+       :g => HISTORICAL_MODES[options[:period]],
+       :ignore => '.csv',
+     }
+     if options[:start_date]
+       params[:a] = options[:start_date].month-1
+       params[:b] = options[:start_date].day
+       params[:c] = options[:start_date].year
+     end
+     if options[:end_date]
+       params[:d] = options[:end_date].month-1
+       params[:e] = options[:end_date].day
+       params[:f] = options[:end_date].year
+     end
+
+     url = "http://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
      conn = open(url)
      cols =
        if options[:period] == :dividends_only

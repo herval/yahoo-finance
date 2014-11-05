@@ -3,27 +3,25 @@ require 'test/unit'
 require File.join(File.dirname(__FILE__),'../lib/yahoo_finance')
 
 class TestYahoo_finance_test < Test::Unit::TestCase
-  def test_quotes
+  def days_ago(days)
+    Time::now-(24*60*60*days)
+  end
+
+  def test_simple_quotes
     quotes = YahooFinance.quotes(["BVSP", "AAPL"])
     assert_equal(2, quotes.size)
-    
-    assert_nothing_raised do
-      q = YahooFinance.historical_quotes("MSFT", Time::now-(24*60*60*40), Time::now, { :raw => false, :period => :daily })
-      [:trade_date, :open, :high, :low, :close, :volume, :adjusted_close].each do |col|
-        assert q.first.send(col)
-      end
-    end
+  end
 
-    assert_nothing_raised do
-     q = YahooFinance.historical_quotes("MSFT", Time::now-(24*60*60*400), Time::now, { :raw => false, :period => :dividends_only })
-     assert q.first.dividend_pay_date
-     assert q.first.dividend_yield
-    end
-     
-    assert_nothing_raised do
-      YahooFinance.quotes(["AAPL", "MSFT", "BVSP", "JPYUSD" ],
-                          YahooFinance::COLUMNS.take(20).collect { |k, v| v },
-                          { raw: false })
+  def test_custom_columns
+    YahooFinance.quotes(["AAPL", "MSFT", "BVSP", "JPYUSD" ],
+                        YahooFinance::COLUMNS.take(20).collect { |k, v| v },
+                        { raw: false })
+  end
+
+  def test_historical_quotes
+    q = YahooFinance.historical_quotes("MSFT", { :raw => false, :period => :daily, :start_date => days_ago(40) })
+    [:trade_date, :open, :high, :low, :close, :volume, :adjusted_close].each do |col|
+      assert q.first.send(col)
     end
   end
 
@@ -34,12 +32,18 @@ class TestYahoo_finance_test < Test::Unit::TestCase
     assert s.first.after
   end
 
+  def test_dividends
+    q = YahooFinance.historical_quotes("MSFT", { :raw => false, :period => :dividends_only, :start_date => days_ago(400) })
+    assert q.first.dividend_pay_date
+    assert q.first.dividend_yield
+  end
+
   def test_escapes_symbol_for_url
     assert_nothing_raised do
       YahooFinance.quotes(["^AXJO"])
     end
     assert_nothing_raised do
-      YahooFinance.historical_quotes("^AXJO", Time::now-(24*60*60*400), Time::now)
+      YahooFinance.historical_quotes("^AXJO", :start_date => days_ago(400))
     end
   end
   
