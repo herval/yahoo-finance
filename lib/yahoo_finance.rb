@@ -121,6 +121,7 @@ end
   # :raw - if true, each column will be converted (to numbers, dates, etc)
   def self.quotes(symbols_array, columns_array = [:symbol, :last_trade_price, :last_trade_date, :change, :previous_close], options = { })
     options[:raw] ||= true
+
     ret = []
     symbols_array.each_slice(SYMBOLS_PER_REQUEST) do |symbols|
       read_quotes(symbols.join("+"), columns_array).map do |row|
@@ -128,6 +129,11 @@ end
       end
     end
     ret
+  end
+
+  def self.quote(symbol, columns_array = [:symbol, :last_trade_price, :last_trade_date, :change, :previous_close], options = { })
+    options[:raw] ||= true
+    quotes([symbol], columns_array, options).first
   end
 
   def self.historical_quotes(symbol, options = {})
