@@ -14,8 +14,8 @@ else
 end
 
  class YahooFinance
-  
-   VERSION = '0.1.0'
+
+   VERSION = '0.2.0'
 
    COLUMNS = {
      :ask => "a",
@@ -38,8 +38,8 @@ end
      :error_indicator => "e1",
      :eps_estimate_current_year => "e7",
      :eps_estimate_next_year => "e8",
-     :eps_estimate_next_quarter => "e9", 
-     :float_shares => "f6", 
+     :eps_estimate_next_quarter => "e9",
+     :float_shares => "f6",
      :low => "g",
      :high => "h",
      :low_52_weeks => "j",
@@ -50,9 +50,9 @@ end
      :holdings_gain_percent_realtime => "g5",
      :holdings_gain_realtime => "g6",
      :more_info => "i",
-     :order_book => "i5", 
+     :order_book => "i5",
      :market_capitalization => "j1",
-     :market_cap_realtime => "j3", 
+     :market_cap_realtime => "j3",
      :ebitda => "j4",
      :change_From_52_week_low => "j5",
      :percent_change_from_52_week_low => "j6",
@@ -106,7 +106,7 @@ end
      :dividend_yield => "y",
      :adjusted_close => nil # this one only comes in historical quotes
   }
-  
+
   HISTORICAL_MODES = {
     :daily => "d",
     :weekly => "w",
@@ -160,9 +160,9 @@ end
       OpenStruct.new(:symbol => symbol, :date => Date.strptime(date.strip, '%Y%m%d'), :before => before.to_i, :after => after.to_i)
     end
   end
-  
+
   private
-  
+
   def self.read_quotes(symb_str, cols)
      columns = "#{cols.map {|col| COLUMNS[col] }.join('')}"
      conn = open("http://download.finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")

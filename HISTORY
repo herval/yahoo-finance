@@ -1,13 +1,19 @@
-Version 0.1.0 - April 05, 2011
+0.2.0 - Nov 24, 2014
+====================
+* Allow fetching a single symbol with the `quote` method
+* Multiple fixes to comply w/ Yahoo API changes
+* Optional start/end dates (the quotes method now takes an options hash)
+
+0.1.0 - Apr 05, 2011
 ===============================
 * Use ruby CSV
 * Refactor
 
-Version 0.0.2 - August 05, 2007
+0.0.2 - Aug 05, 2007
 ===============================
 * Type-casting: pass the option :raw => false to the quotes method to get columns converted from string to specific types (mostly float, date, time and datetime)
 * Historical quotes: a convenient method to get historical quotes for a given symbol in an interval, getting either daily, weekly or monthly quotes - or dividend yields only
 
-Version 0.0.1 - August 04, 2007
+0.0.1 - Aug 04, 2007
 ===============================
 * Initial implementation - no bells, no whristles :)
