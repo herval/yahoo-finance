@@ -165,7 +165,7 @@ end
 
   def self.read_quotes(symb_str, cols)
      columns = "#{cols.map {|col| COLUMNS[col] }.join('')}"
-     conn = open("http://download.finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")
+     conn = open("https://download.finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")
      CSV.parse(conn.read, :headers => cols)
   end
 
@@ -186,7 +186,7 @@ end
        params[:f] = options[:end_date].year
      end
 
-     url = "http://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
+     url = "https://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
      conn = open(url)
      cols =
        if options[:period] == :dividends_only
@@ -215,13 +215,13 @@ end
        params[:f] = options[:end_date].year
      end
 
-     url = "http://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
+     url = "https://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
      conn = open(url)
      CSV.parse(conn.read)
   end
 
   def self.read_symbols(query)
-     conn = open("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}&callback=YAHOO.Finance.SymbolSuggest.ssCallback")
+     conn = open("https://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}&callback=YAHOO.Finance.SymbolSuggest.ssCallback")
      result = conn.read
      result.sub!('YAHOO.Finance.SymbolSuggest.ssCallback(', '').chomp!(')')
      json_result = JSON.parse(result)
