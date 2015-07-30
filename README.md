@@ -4,7 +4,7 @@ A dead simple wrapper for yahoo finance quotes end-point.
 ## Installation:
 
 `gem install 'yahoo-finance'`
-`require 'yahoo_finance'`
+`require 'yahoo-finance'`
 
 If using bundler: 
 `gem 'yahoo-finance', require: 'yahoo_finance'`
@@ -16,7 +16,8 @@ If using bundler:
 Pass an array of valid symbols (stock names, indexes, exchange rates) and a list of fields you want:
 
 ```ruby
-data = YahooFinance.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date])
+yahoo_client = YahooFinance::Client.new
+data = yahoo_client.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date])
 ```
 
 Data is now an array of results. You now have accessor methods to retrieve the data, with the return results being strings:
@@ -28,7 +29,8 @@ puts data[0].symbol + " value is: " + data[0].ask
 Passing `raw: false` will return numerical values
 
 ```ruby
-data = YahooFinance.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date], { raw: false } )
+yahoo_client = YahooFinance::Client.new
+data = yahoo_client.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date], { raw: false } )
 data[0].ask # This is now a float
 ```
 
@@ -123,6 +125,27 @@ The full list of fields follows:
      :weeks_range_52 
 ```
 
+### Getting symbols by stock market
+
+Create a YahooFinance::Client instance
+
+```ruby
+yahoo_client = YahooClient::Client.new
+```
+
+Calling symbols_by_market method (symbols_by_market(country, stock_market))
+Note: Can only be called with US Stock Markets for now
+
+```ruby
+yahoo_client.symbols_by('us', 'nyse') # Only US Stock Markets For Now
+```
+
+This method returns an array of symbols that can be used with the quotes method
+
+```ruby
+data = yahoo_client.quotes(yahoo_client.symbols_by_market('us', 'nyse'), [:ask, :bid, :last_trade_date])
+```
+
 ### Getting historical quotes
 
 Here you can specify a date range and a symbol, and retrieve historical data for it. 
@@ -130,19 +153,22 @@ The last parameter (options) can include, besides the "raw" option, a "period" o
 The period can be specified as :daily, :monthly, :weekly or :dividends_only
 
 ```ruby
-data = YahooFinance.historical_quotes("AAPL") # entire historical data
+yahoo_client = YahooFinance::Client.new
+data = yahoo_client.historical_quotes("AAPL") # entire historical data
 ```
 
 or
 
 ```ruby
-data = YahooFinance.historical_quotes("AAPL", { start_date: Time::now-(24*60*60*10), end_date: Time::now }) # 10 days worth of data
+yahoo_client = YahooFinance::Client.new
+data = yahoo_client.historical_quotes("AAPL", { start_date: Time::now-(24*60*60*10), end_date: Time::now }) # 10 days worth of data
 ```
 
 or
 
 ``` ruby
-data = YahooFinance.historical_quotes("AAPL", { raw: false, period: :monthly })
+yahoo_client = YahooFinance::Client.new
+data = yahoo_client.historical_quotes("AAPL", { raw: false, period: :monthly })
 ```
 
 ### Getting splits
@@ -150,7 +176,8 @@ data = YahooFinance.historical_quotes("AAPL", { raw: false, period: :monthly })
 You can also retrieve split data.
 
 ```ruby
-data = YahooFinance.splits('AAPL', :start_date => Date.today - 10*365)
+yahoo_client = YahooFinance::Client.new
+data = yahoo_client.splits('AAPL', :start_date => Date.today - 10*365)
 data[0].date   # Date<2014-06-09>
 data[0].before # 1
 data[0].after  # 7
@@ -160,3 +187,4 @@ data[0].after  # 7
 Enjoy! :-)
 
 - Herval (hervalfreire@gmail.com)
+- Eric D. Santos Sosa (eric.santos@cometa.works)
