@@ -7,7 +7,8 @@ A dead simple wrapper for yahoo finance quotes end-point.
 `require 'yahoo-finance'`
 
 If using bundler: 
-`gem 'yahoo-finance', require: 'yahoo_finance'`
+`gem 'yahoo-finance', git: 'https://github.com/cometaworks/yahoo-finance.git'`
+`require: 'yahoo-finance'`
 
 ## Usage:
 
@@ -134,7 +135,7 @@ yahoo_client = YahooClient::Client.new
 ```
 
 Calling symbols_by_market method (symbols_by_market(country, stock_market))
-Note: Can only be called with US Stock Markets for now
+\n Note: Can only be called with US Stock Markets for now
 
 ```ruby
 yahoo_client.symbols_by('us', 'nyse') # Only US Stock Markets For Now
