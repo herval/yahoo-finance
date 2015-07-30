@@ -7,6 +7,7 @@ A dead simple wrapper for yahoo finance quotes end-point.
 `require 'yahoo-finance'`
 
 If using bundler: 
+
 `gem 'yahoo-finance', git: 'https://github.com/cometaworks/yahoo-finance.git'`
 `require: 'yahoo-finance'`
 
