@@ -128,7 +128,7 @@ module YahooFinance
         params[:f] = options[:end_date].year
       end
 
-     url = "http://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| '#{k}=#{v}'}.join('&')}"
+     url = "http://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
      conn = open(url)
      cols = if options[:period] == :dividends_only
               [:dividend_pay_date, :dividend_yield]
@@ -156,14 +156,13 @@ module YahooFinance
         params[:f] = options[:end_date].year
       end
 
-     url = "http://ichart.finance.yahoo.com/x?#{params.map{|k, v|'#{k}=#{v}'}.join('&')}"
+     url = "http://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join('&')}"
      conn = open(url)
      CSV.parse(conn.read)
     end
 
     def read_symbols(query)
-      conn = open("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}
-        &callback=YAHOO.Finance.SymbolSuggest.ssCallback")
+      conn = open("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}&callback=YAHOO.Finance.SymbolSuggest.ssCallback")
       result = conn.read
       result.sub!('YAHOO.Finance.SymbolSuggest.ssCallback(', '').chomp!(')')
       json_result = JSON.parse(result)
