@@ -8,7 +8,7 @@ A dead simple wrapper for yahoo finance quotes end-point.
 
 If using bundler: 
 
-`gem 'yahoo-finance', git: 'https://github.com/cometaworks/yahoo-finance.git'`
+`gem 'yahoo-finance', git: 'https://github.com/herval/yahoo-finance.git'`
 
 `require: 'yahoo-finance'`
 
@@ -128,7 +128,7 @@ The full list of fields follows:
      :weeks_range_52 
 ```
 
-### Getting symbols by stock market
+### Getting symbols by stock market (beta)
 
 Create a YahooFinance::Client instance
 
@@ -137,7 +137,10 @@ yahoo_client = YahooClient::Client.new
 ```
 
 Calling symbols_by_market method (symbols_by_market(country, stock_market))
-\n Note: Can only be called with US Stock Markets for now
+
+Note: Can only be called with US Stock Markets for now. 
+
+*Important: This data comes directly from NASDAQ's CSV endpoints, NOT Yahoo Finance*. It might be extracted into a different Gem in the future.
 
 ```ruby
 yahoo_client.symbols_by('us', 'nyse') # Only US Stock Markets For Now

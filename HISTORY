@@ -1,3 +1,7 @@
+0.3.0 - Aug 16, 2015
+====================
+* Refactorings & support for US companies data (via NASDAQ's Apis) - by Eric D. Santos Sosa
+
 0.2.0 - Nov 24, 2014
 ====================
 * Allow fetching a single symbol with the `quote` method
