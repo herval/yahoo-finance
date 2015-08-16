@@ -3,14 +3,10 @@ A dead simple wrapper for yahoo finance quotes end-point.
 
 ## Installation:
 
-`gem install 'yahoo-finance'`
-`require 'yahoo-finance'`
+Just add it to your `Gemfile`: 
 
-If using bundler: 
+`gem 'yahoo-finance'`
 
-`gem 'yahoo-finance', git: 'https://github.com/herval/yahoo-finance.git'`
-
-`require: 'yahoo-finance'`
 
 ## Usage:
 
@@ -39,7 +35,7 @@ data[0].ask # This is now a float
 
 The full list of fields follows:
 
-``` ruby
+```ruby
      :after_hours_change_real_time
      :annualized_gain 
      :ask
