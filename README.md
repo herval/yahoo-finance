@@ -129,7 +129,7 @@ The full list of fields follows:
 Create a YahooFinance::Client instance
 
 ```ruby
-yahoo_client = YahooClient::Client.new
+yahoo_client = YahooFinance::Client.new
 ```
 
 Calling symbols_by_market method (symbols_by_market(country, stock_market))
