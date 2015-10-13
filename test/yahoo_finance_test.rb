@@ -93,4 +93,12 @@ class YahooFinanceTest < Test::Unit::TestCase
       symbols.first.name
     end
   end
+
+  def test_na_as_nil
+    ycl = YahooFinance::Client.new
+    quotes = ycl.quotes(['non_exisiting_symbol'], [:name])
+    assert_equal('N/A', quotes.first.name)
+    quotes = ycl.quotes(['non_exisiting_symbol'], [:name], na_as_nil: true)
+    assert_equal(nil, quotes.first.name)
+  end
 end
