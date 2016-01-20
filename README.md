@@ -139,7 +139,7 @@ Note: Can only be called with US Stock Markets for now.
 *Important: This data comes directly from NASDAQ's CSV endpoints, NOT Yahoo Finance*. It might be extracted into a different Gem in the future.
 
 ```ruby
-yahoo_client.symbols_by('us', 'nyse') # Only US Stock Markets For Now
+yahoo_client.symbols_by_market('us', 'nyse') # Only US Stock Markets For Now
 ```
 
 This method returns an array of symbols that can be used with the quotes method
