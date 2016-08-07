@@ -4,7 +4,6 @@ require "json"
 require "yahoo-finance/version"
 require "yahoo-finance/finance-utils"
 require "csv"
-require 'pry'
 
 module YahooFinance
   # Client for Yahoo Finance Queries
