@@ -4,6 +4,7 @@ require "json"
 require "yahoo-finance/version"
 require "yahoo-finance/finance-utils"
 require "csv"
+require 'pry'
 
 module YahooFinance
   # Client for Yahoo Finance Queries
@@ -118,7 +119,7 @@ module YahooFinance
       symbols_array.each_slice(SYMBOLS_PER_REQUEST) do |symbols|
         read_quotes(symbols.join("+"), columns_array).map do |row|
           if options[:na_as_nil]
-            row.each { |item| item[-1] = nil if item[-1] == 'N/A' }
+            row.each{ |key, value| row[key] = nil if value == 'N/A' }
           end
           ret << OpenStruct.new(row.to_hash)
         end
