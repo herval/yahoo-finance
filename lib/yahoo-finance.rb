@@ -117,6 +117,9 @@ module YahooFinance
       ret = []
       symbols_array.each_slice(SYMBOLS_PER_REQUEST) do |symbols|
         read_quotes(symbols.join("+"), columns_array).map do |row|
+          if options[:na_as_nil]
+            row.each{ |key, value| row[key] = nil if value == 'N/A' }
+          end
           ret << OpenStruct.new(row.to_hash)
         end
       end

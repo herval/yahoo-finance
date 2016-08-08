@@ -1,0 +1,15 @@
+GEM
+  specs:
+    json (1.8.2)
+    rake (10.4.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  json
+  rake
+
+BUNDLED WITH
+   1.10.3
