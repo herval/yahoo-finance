@@ -165,7 +165,7 @@ module YahooFinance
 
     def read_quotes(symb_str, cols)
       columns = "#{cols.map { |col| COLUMNS[col] }.join("")}"
-      conn = open("http://download.finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")
+      conn = open("https://download.finance.yahoo.com/d/quotes.csv?s=#{URI.escape(symb_str)}&f=#{columns}")
       CSV.parse(conn.read, headers: cols)
     end
 
@@ -184,7 +184,7 @@ module YahooFinance
         params[:f] = options[:end_date].year
       end
 
-     url = "http://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
+     url = "https://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
      conn = open(url)
      cols = if options[:period] == :dividends_only
               [:dividend_pay_date, :dividend_yield]
@@ -212,7 +212,7 @@ module YahooFinance
         params[:f] = options[:end_date].year
       end
 
-     url = "http://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
+     url = "https://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
      conn = open(url)
      CSV.parse(conn.read)
     end
