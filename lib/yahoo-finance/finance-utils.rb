@@ -9,11 +9,11 @@ module YahooFinance
     MARKETS = OpenStruct.new(
       us: OpenStruct.new(
         nasdaq: OpenStruct.new(
-          url: "https://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download"),
+          url: "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download"),
         nyse: OpenStruct.new(
-          url: "https://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download"),
+          url: "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download"),
         amex: OpenStruct.new(
-          url: "https://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download")))
+          url: "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download")))
 
     def symbols_by_market(country, market)
       symbols = []

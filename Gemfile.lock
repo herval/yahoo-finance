@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     json (1.8.2)
     rake (10.4.2)
@@ -12,4 +13,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   1.10.3
+   1.10.6

@@ -14,4 +14,8 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = false
   s.extra_rdoc_files = ["README.md", "HISTORY"]
   s.add_runtime_dependency("fastercsv") if RUBY_VERSION < "1.9"
+  s.add_dependency 'json', '~> 1.8'
+  s.add_development_dependency 'bundler', '~> 1.10'
+  s.add_development_dependency 'rake', '~> 10.0'
+  s.add_development_dependency 'test-unit'
 end
