@@ -113,6 +113,8 @@ The full list of fields follows:
      :price_paid 
      :price_per_book 
      :price_per_sales 
+     :revenue
+     :shares_outstanding
      :shares_owned 
      :short_ratio 
      :stock_exchange 
