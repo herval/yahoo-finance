@@ -115,6 +115,9 @@ module YahooFinance
       :symbol, :last_trade_price, :last_trade_date,
       :change, :previous_close], options = {})
 
+      # remove invalid keys
+      columns_array.reject! { |c| !COLUMNS.key?(c) }
+
       options[:raw] ||= true
       ret = []
       symbols_array.each_slice(SYMBOLS_PER_REQUEST) do |symbols|
