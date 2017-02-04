@@ -1,3 +1,9 @@
+1.2.0 - Feb 04, 2017
+====================
+* Fixed support for { raw: false }
+* Symbols that are not found will now not return (instead of returning a struct with an empty :symbol field and a bunch of "N/A"s)
+* The returned quotes now will always include the :symbol name 
+
 0.3.0 - Aug 16, 2015
 ====================
 * Refactorings & support for US companies data (via NASDAQ's Apis) - by Eric D. Santos Sosa
@@ -20,4 +26,4 @@
 
 0.0.1 - Aug 04, 2007
 ===============================
-* Initial implementation - no bells, no whristles :)
+* Initial implementation - no bells, no whistles :)
