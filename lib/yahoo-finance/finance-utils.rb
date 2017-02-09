@@ -17,8 +17,9 @@ module YahooFinance
 
     def symbols_by_market(country, market)
       symbols = []
-      return symbols unless MARKETS[country][market]
-      CSV.foreach(open(MARKETS[country][market].url)) do |row|
+      market = MARKETS.send(country).send(market)
+      return symbols if market.nil?
+      CSV.foreach(open(market.url)) do |row|
         next if row.first == "Symbol"
         symbols.push(row.first.gsub(" ", ""))
       end

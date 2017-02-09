@@ -9,9 +9,9 @@ class YahooFinanceTest < Test::Unit::TestCase
   end
 
   def test_finance_utils_markets
-    assert_not_equal(nil, YahooFinance::FinanceUtils::MARKETS['us'])
-    assert_not_equal(nil, YahooFinance::FinanceUtils::MARKETS['us']['nyse'].url)
-    assert_not_equal(nil, YahooFinance::FinanceUtils::MARKETS['us']['nasdaq'].url)
+    assert_not_equal(nil, YahooFinance::FinanceUtils::MARKETS.us)
+    assert_not_equal(nil, YahooFinance::FinanceUtils::MARKETS.us.nyse.url)
+    assert_not_equal(nil, YahooFinance::FinanceUtils::MARKETS.us.nasdaq.url)
   end
 
   def test_finance_utils_stock_by_market
@@ -46,7 +46,7 @@ class YahooFinanceTest < Test::Unit::TestCase
   def test_custom_columns
     ycl = YahooFinance::Client.new
     q = ycl.quotes(['AAPL'], YahooFinance::Client::COLUMNS.map { |k, v| k }, { raw: false })[0]
-    q.each_pair.map do |k, v|
+    q.each_pair do |k, v|
       type = YahooFinance::Client::COLUMNS[k][1]
       assert v.is_a?(type), "conversion failed: #{k} - #{v} (#{v.class.to_s} should be #{type.to_s})" if !v.nil?
     end
