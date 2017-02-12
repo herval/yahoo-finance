@@ -203,6 +203,3 @@ data[0].after  # 7
 
 
 Enjoy! :-)
-
-- Herval (hervalfreire@gmail.com)
-- Eric D. Santos Sosa (eric.santos@cometa.works)
