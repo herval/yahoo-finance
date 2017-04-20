@@ -23,6 +23,7 @@ module YahooFinance
       :change_and_percent_change => ["c", String],
       :change => ["c1", BigDecimal],
       :comission => ["c3", String],
+      :currency => ["c4", String],
       :change_real_time => ["c6", BigDecimal],
       :after_hours_change_real_time => ["c8", String],
       :dividend_per_share => ["d", BigDecimal],
