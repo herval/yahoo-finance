@@ -1,4 +1,5 @@
 require "open-uri"
+require 'nokogiri'
 require "ostruct"
 require "json"
 require "yahoo-finance/version"
@@ -101,14 +102,13 @@ module YahooFinance
       :day_value_change_realtime => ["w4", String],
       :stock_exchange => ["x", String],
       :dividend_yield => ["y", BigDecimal],
-      :adjusted_close => [nil, BigDecimal] # this one only comes in historical quotes      
+      :adjusted_close => [nil, BigDecimal] # this one only comes in historical quotes
     }
 
     HISTORICAL_MODES = {
-      daily: "d", 
-      weekly: "w",
-      monthly: "m", 
-      dividends_only: "v"
+      daily: "1d",
+      weekly: "1wk",
+      monthly: "1mo"
     }
 
     SYMBOLS_PER_REQUEST = 50
@@ -146,11 +146,20 @@ module YahooFinance
     end
 
     def historical_quotes(symbol, options = {})
-      options[:raw] ||= true
       options[:period] ||= :daily
-      read_historical(symbol, options).map do |row|
-        OpenStruct.new(row.to_hash.merge(symbol: symbol))
+      params = { interval: HISTORICAL_MODES[options[:period]], filter: 'history' }
+      if options[:start_date]
+        params[:period1] = options[:start_date].to_time.to_i
+      else
+        params[:period1] = (Time.now() - 1.day).to_time.to_i
       end
+      if options[:end_date]
+        params[:period2] = options[:end_date].to_time.to_i
+      else
+        params[:period2] = Time.now().to_time.to_i
+      end
+      url = "https://finance.yahoo.com/quote/#{URI.escape(symbol)}/history/?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
+      read_historical(symbol, url)
     end
 
     def symbols(query)
@@ -191,30 +200,35 @@ module YahooFinance
       CSV.parse(conn.read, headers: cols)
     end
 
-    def read_historical(symbol, options)
-      params = { s: URI.escape(symbol), g: HISTORICAL_MODES[options[:period]], ignore: ".csv" }
-      if options[:start_date]
-        params[:a] = options[:start_date].month-1
-        params[:b] = options[:start_date].day
-        params[:c] = options[:start_date].year
-      end
-      if options[:end_date]
-        params[:d] = options[:end_date].month-1
-        params[:e] = options[:end_date].day
-        params[:f] = options[:end_date].year
-      end
+    def read_historical(symbol, url)
+      doc = Nokogiri::HTML(open(url))
+      rows = doc.xpath("//table")[1].css('tr')
 
-     url = "https://ichart.finance.yahoo.com/table.csv?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
-     conn = open(url)
-     cols = if options[:period] == :dividends_only
-              [:dividend_pay_date, :dividend_yield]
-            else
-              [:trade_date, :open, :high, :low, :close, :volume, :adjusted_close]
-            end
-     result = CSV.parse(conn.read, headers: cols)
-     #:first_row, :header_converters => :symbol)
-     result.delete(0)  # drop returned header
-     result
+      cols = rows[0].css('th').to_a
+      trade_date_col = cols.index { |c| c.text == 'Date' }
+      open_col = cols.index { |c| c.text == 'Open' }
+      high_col = cols.index { |c| c.text == 'High' }
+      low_col = cols.index { |c| c.text == 'Low' }
+      close_col = cols.index { |c| c.text == 'Close*' }
+      adjusted_close_col = cols.index { |c| c.text == 'Adj Close**' }
+      volume_col = cols.index { |c| c.text == 'Volume' }
+
+      rows.drop(0).inject([]) do |data, row|
+        divs = row.css('td')
+        if divs[1] && !divs[1].text.include?('Dividend') #Ignore this row in the table
+          data << OpenStruct.new({
+            'symbol': symbol,
+            'date': Date.parse(divs[trade_date_col]).to_s,
+            'open': divs[open_col].text.to_f,
+            'high': divs[high_col].text.to_f,
+            'low': divs[low_col].text.to_f,
+            'close': divs[close_col].text.to_f,
+            'adjusted_close': divs[adjusted_close_col].text.to_f,
+            'volume': divs[volume_col].text.gsub(/[^\d^\.]/, '').to_f
+          })
+        end
+        data
+      end
     end
 
     def read_splits(symbol, options)
