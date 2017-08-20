@@ -216,7 +216,7 @@ module YahooFinance
 
       rows.drop(0).inject([]) do |data, row|
         divs = row.css('td')
-        if divs[1] && !divs[1].text.include?('Dividend') #Ignore this row in the table
+        if divs[1] && !divs[1].text.include?('Dividend') && !divs[1].text.include?('Stock Split') #Ignore these rows in the table
           data << OpenStruct.new({
             'symbol': symbol,
             'date': Date.parse(divs[trade_date_col]).to_s,
