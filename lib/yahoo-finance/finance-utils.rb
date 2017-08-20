@@ -44,7 +44,7 @@ module YahooFinance
       (1..20).to_a.map do |page|
         params[:page] = page
         get_symbol_changes(build_url(SYMBOL_CHANGE_URL, params))
-      end
+      end.flatten
     end
 
     def get_symbol_changes(url)
@@ -60,7 +60,7 @@ module YahooFinance
 
       rows.drop(0).inject([]) do |data, row|
         divs = row.css('td')
-        if !divs.empty?
+        if !divs.empty? && divs[0].text.strip != 'No records found.'
           data << OpenStruct.new({
             effective_date: Date.strptime(divs[effective_date_col].text, '%m/%d/%Y').to_s,
             old_symbol: divs[old_col].text.strip,
