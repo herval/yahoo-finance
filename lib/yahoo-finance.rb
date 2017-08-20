@@ -204,6 +204,7 @@ module YahooFinance
       doc = Nokogiri::HTML(open(url))
       rows = doc.xpath("//table")[1].css('tr')
 
+      return [] if rows.empty?
       cols = rows[0].css('th').to_a
       trade_date_col = cols.index { |c| c.text == 'Date' }
       open_col = cols.index { |c| c.text == 'Open' }
