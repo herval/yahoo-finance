@@ -145,21 +145,37 @@ module YahooFinance
       quotes([symbol], columns_array, options).first
     end
 
+    def time_from_days(days)
+      24*60*60*days
+    end
+
     def historical_quotes(symbol, options = {})
       options[:period] ||= :daily
-      params = { interval: HISTORICAL_MODES[options[:period]], filter: 'history' }
-      if options[:start_date]
-        params[:period1] = options[:start_date].to_time.to_i
-      else
-        params[:period1] = (Time.now() - 1.day).to_time.to_i
+      start_date = options[:start_date] || Time.now() - time_from_days(1)
+      end_date = options[:end_date] || Time.now()
+      params = {
+        interval: HISTORICAL_MODES[options[:period]],
+        filter: 'history'
+      }
+      days_per_page = case params[:interval]
+                 when HISTORICAL_MODES[:daily]
+                   140 # 100 results divided by 5 trading days/week * 7 days/week = number of days per results
+                 when HISTORICAL_MODES[:weekly]
+                   700 # 7days/week * 100 results
+                 when HISTORICAL_MODES[:monthly]
+                   2900 # for simplicity assume that all months have 29 days * 100 results (remove duplicates at the end)
+                 end
+      current_date = start_date.to_time.to_i
+      data = []
+      while Time.at(current_date).to_datetime < end_date
+        params[:period1] = current_date
+        current_end_date = [current_date + time_from_days(days_per_page), end_date.to_time.to_i].min
+        params[:period2] = current_end_date
+        url = "https://finance.yahoo.com/quote/#{URI.escape(symbol)}/history/?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
+        data << read_historical(symbol, url)
+        current_date = current_end_date + time_from_days(1)
       end
-      if options[:end_date]
-        params[:period2] = options[:end_date].to_time.to_i
-      else
-        params[:period2] = Time.now().to_time.to_i
-      end
-      url = "https://finance.yahoo.com/quote/#{URI.escape(symbol)}/history/?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
-      read_historical(symbol, url)
+      data.uniq.flatten
     end
 
     def symbols(query)
