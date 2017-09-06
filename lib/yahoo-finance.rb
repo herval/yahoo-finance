@@ -167,7 +167,7 @@ module YahooFinance
                  end
       current_date = start_date.to_time.to_i
       data = []
-      while Time.at(current_date).to_datetime < end_date
+      while Time.at(current_date) < end_date
         params[:period1] = current_date
         current_end_date = [current_date + time_from_days(days_per_page), end_date.to_time.to_i].min
         params[:period2] = current_end_date
@@ -235,7 +235,7 @@ module YahooFinance
         if divs[1] && !divs[1].text.include?('Dividend') && !divs[1].text.include?('Stock Split') #Ignore these rows in the table
           data << OpenStruct.new({
             'symbol': symbol,
-            'date': Date.parse(divs[trade_date_col]).to_s,
+            'trade_date': Date.parse(divs[trade_date_col]).to_s,
             'open': divs[open_col].text.to_f,
             'high': divs[high_col].text.to_f,
             'low': divs[low_col].text.to_f,

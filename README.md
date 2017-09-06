@@ -166,9 +166,12 @@ data = yahoo_client.quotes(yahoo_client.symbols_by_market('us', 'nyse'), [:ask, 
 
 ### Getting historical quotes
 
-Here you can specify a date range and a symbol, and retrieve historical data for it. 
-The last parameter (options) can include, besides the "raw" option, a "period" option.
-The period can be specified as :daily, :monthly, :weekly or :dividends_only
+Retrieve historical data for a specific symbol (i.e. `AAPL`).
+
+The last parameter (options) can include:
+- `period`: can be specified as `:daily`, `:monthly`, `:weekly`
+- `start_date`: the date from which historical quotes should be fetched (the parameter value should respond to `to_time`) (default: yesterday)
+- `end_date`: the date up to which historical quotes should be fetched (the parameter value should respond to `to_time`) (default: today)
 
 ```ruby
 yahoo_client = YahooFinance::Client.new
@@ -186,7 +189,7 @@ or
 
 ``` ruby
 yahoo_client = YahooFinance::Client.new
-data = yahoo_client.historical_quotes("AAPL", { raw: false, period: :monthly })
+data = yahoo_client.historical_quotes("AAPL", { period: :monthly })
 ```
 
 ### Getting splits

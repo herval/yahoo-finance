@@ -56,7 +56,7 @@ class YahooFinanceTest < Test::Unit::TestCase
     ycl = YahooFinance::Client.new
     q = ycl.historical_quotes('MSFT', period: :daily, start_date: days_ago(40))
 
-    [:date, :open, :high, :low, :close, :volume, :adjusted_close].each do |col|
+    [:trade_date, :open, :high, :low, :close, :volume, :adjusted_close].each do |col|
       assert q.first.public_send(col)
     end
   end
