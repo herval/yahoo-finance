@@ -27,7 +27,8 @@ module YahooFinance
 
     def companies(country, markets = MARKET_NAMES)
       return [] unless MARKETS[country]
-      if markets.present?
+      markets = Array(markets)
+      if markets.any?
         markets.map { |market| companies_by_market(country)[market] }.flatten
       else
         companies_by_market(country).values.flatten
@@ -35,7 +36,7 @@ module YahooFinance
     end
 
     def companies_by_market(country, markets = MARKET_NAMES)
-      markets.inject({}) do |h, market|
+      Array(markets).inject({}) do |h, market|
         companies = []
         next unless MARKETS[country][market]
         CSV.foreach(open(MARKETS[country][market].url)) do |row|
