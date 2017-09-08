@@ -1,4 +1,4 @@
-![build status](https://travis-ci.org/herval/yahoo-finance.svg)
+[![Build Status](https://travis-ci.org/herval/yahoo-finance.svg?branch=master)](https://travis-ci.org/herval/yahoo-finance)
 
 # Ruby's Yahoo Finance Wrapper
 A dead simple wrapper for yahoo finance quotes end-point.
