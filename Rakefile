@@ -9,3 +9,7 @@ Rake::TestTask.new do |t|
   t.test_files = FileList['test/*test.rb']
   t.verbose = true
 end
+
+task :console do
+  exec "irb -r yahoo-finance -I ./lib"
+end
