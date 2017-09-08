@@ -164,6 +164,78 @@ This method returns an array of symbols that can be used with the quotes method
 data = yahoo_client.quotes(yahoo_client.symbols_by_market('us', 'nyse'), [:ask, :bid, :last_trade_date])
 ```
 
+### Getting companies by stock market (beta)
+
+Create a YahooFinance::Client instance
+
+```ruby
+yahoo_client = YahooFinance::Client.new
+```
+
+Calling `companies_by_market` method (`companies_by_market(country, stock_market)`)
+
+Note: Can only be called with US Stock Markets for now.
+
+*Important: This data comes directly from NASDAQ's CSV endpoints, NOT Yahoo Finance*. It might be extracted into a different Gem in the future.
+
+```ruby
+ # Only US Stock Markets For Now
+yahoo_client.companies_by_market('us', 'nyse')
+yahoo_client.companies_by_market('us', ['nyse', 'nasdaq'])
+yahoo_client.companies_by_market('us') #All available markets by default
+```
+
+This method returns an hash of companies grouped by market.
+Each company object contains the following fields: symbol, name, last_sale, market_cap, ipo_year, sector, industry, summary_quote, market
+
+### Getting sectors (beta)
+
+Create a YahooFinance::Client instance
+
+```ruby
+yahoo_client = YahooFinance::Client.new
+```
+
+Calling `sectors` method (`sectors(country, stock_market)`)
+
+Note: Can only be called with US Stock Markets for now.
+
+*Important: This data comes directly from NASDAQ's CSV endpoints, NOT Yahoo Finance*. It might be extracted into a different Gem in the future.
+
+```ruby
+ # Only US Stock Markets For Now
+yahoo_client.sectors('us', 'nyse')
+yahoo_client.sectors('us', ['nyse', 'nasdaq'])
+yahoo_client.sectors('us') #All available markets by default
+```
+
+This method returns an array of sectors on the selected markets.
+Each sector object contains the following fields: name
+
+### Getting industries (beta)
+
+Create a YahooFinance::Client instance
+
+```ruby
+yahoo_client = YahooFinance::Client.new
+```
+
+Calling `industries` method (`industries(country, stock_market)`)
+
+Note: Can only be called with US Stock Markets for now.
+
+*Important: This data comes directly from NASDAQ's CSV endpoints, NOT Yahoo Finance*. It might be extracted into a different Gem in the future.
+
+```ruby
+ # Only US Stock Markets For Now
+yahoo_client.industries('us', 'nyse')
+yahoo_client.industries('us', ['nyse', 'nasdaq'])
+yahoo_client.industries('us') #All available markets by default
+```
+
+This method returns an array of industries on the selected markets.
+Each industry object contains the following fields: name, sector
+
 ### Getting historical quotes
 
 Retrieve historical data for a specific symbol (i.e. `AAPL`).
