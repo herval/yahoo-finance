@@ -1,3 +1,5 @@
+# IMPORTANT: Yahoo Finance CSV API is no longer operational - this Gem is currently not working until support to the v7 API is added 
+
 [![Build Status](https://travis-ci.org/herval/yahoo-finance.svg?branch=master)](https://travis-ci.org/herval/yahoo-finance)
 
 # Ruby's Yahoo Finance Wrapper
