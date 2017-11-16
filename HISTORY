@@ -1,3 +1,13 @@
+3.0.0-alpha.1 - November 19, 2017
+====================
+* Code extracted into modules Quotes, Historical, Splits, Symbols
+* Test/Unit moved over to Minitest
+* Tests extracted out my module
+* Add Byebug for debugging
+* Add Yard for documentation
+* Change Quotes module to use the V7 Api
+* Fix Historical per https://github.com/herval/yahoo-finance/pull/53
+
 2.0.0 - Sep 08, 2017
 ====================
 * Replaced broken CSV API (historical data) with parsing Yahoo Finance HTML using Nokogiri (h/t @zolrag13)
