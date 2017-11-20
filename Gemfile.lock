@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     yahoo-finance (3.0.0.pre.alpha.1)
+      httpclient
       json
       nokogiri
 
@@ -9,6 +10,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     byebug (9.1.0)
+    httpclient (2.8.3)
     json (2.1.0)
     mini_portile2 (2.3.0)
     minitest (5.10.3)

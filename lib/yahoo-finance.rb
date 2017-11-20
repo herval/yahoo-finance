@@ -1,3 +1,4 @@
+require "httpclient"
 require "open-uri"
 require "ostruct"
 require "json"
@@ -16,5 +17,9 @@ module YahooFinance
     include YahooFinance::Quotes
     include YahooFinance::Historical
     include YahooFinance::Symbols
+
+    def http_client
+      @http_client ||= HTTPClient.new
+    end
   end
 end

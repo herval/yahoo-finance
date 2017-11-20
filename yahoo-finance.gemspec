@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'json'
   s.add_dependency 'nokogiri'
+  s.add_dependency 'httpclient'
 
   s.add_development_dependency "bundler", "~> 1.14"
   s.add_development_dependency "rake", "~> 10.0"

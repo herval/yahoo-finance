@@ -21,9 +21,6 @@ module YahooFinance
     # @return [Array<OpenStruct>]
     #
     def quotes(symbols, options = {})
-      # "N/A" is never present if { raw = false }
-      options[:na_as_nil] = true if options[:raw] == false
-
       result = []
       symbols.each_slice(SYMBOLS_PER_REQUEST) do |symbols_slice|
         read_quotes(symbols_slice.join(",")).map do |data|
@@ -37,28 +34,11 @@ module YahooFinance
     end
 
     private
-    
-    def format(str, type)
-      if str.nil?
-        str
-      elsif type == BigDecimal
-        BigDecimal.new(str)
-      elsif type == DateTime
-        DateTime.parse(str)
-      elsif type == Time
-        Time.parse(str)
-      else
-        str
-      end
-    end
 
     def read_quotes(symb_str)
-      conn = open("https://query1.finance.yahoo.com/v7/finance/quote?symbols=#{::CGI::escape(symb_str)}")
-      result = JSON.parse(conn.read)
+      response = http_client.get("https://query1.finance.yahoo.com/v7/finance/quote?symbols=#{::CGI::escape(symb_str)}")
+      result = JSON.parse(response.body)
       result["quoteResponse"]["result"]
-
-    rescue OpenURI::HTTPError
-      []
     end
   end
 end
