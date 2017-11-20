@@ -11,20 +11,15 @@ module YahooFinance
     #   => [#<OpenStruct symbol="AAPL", name="Apple Inc.", exch="NAS", type="S", exchDisp="NASDAQ", typeDisp="Equity">]
     #
     def symbols(query)
-      ret = []
-      read_symbols(query).each do |row|
-        ret << OpenStruct.new(row)
-      end
-      ret
+      read_symbols(query).map { |row| OpenStruct.new(row) }
     end
 
     private
 
     def read_symbols(query)
-      conn = open("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}&region=US&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback")
-      result = conn.read
-      result.sub!("YAHOO.Finance.SymbolSuggest.ssCallback(", "").chomp!(");")
-      json_result = JSON.parse(result)
+      response = http_client.get("http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=#{query}&region=US&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback")
+      response.body.sub!("YAHOO.Finance.SymbolSuggest.ssCallback(", "").chomp!(");")
+      json_result = JSON.parse(response.body)
       json_result["ResultSet"]["Result"]
     end
 

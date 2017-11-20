@@ -35,7 +35,7 @@ module YahooFinance
 
     private
 
-    def read_quotes(symb_str)
+    def read_quotes(symb_str, retry_on_error = true)
       response = http_client.get("https://query1.finance.yahoo.com/v7/finance/quote?symbols=#{::CGI::escape(symb_str)}")
       result = JSON.parse(response.body)
       result["quoteResponse"]["result"]
