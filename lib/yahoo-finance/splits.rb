@@ -30,8 +30,8 @@ module YahooFinance
       end
 
       url = "https://ichart.finance.yahoo.com/x?#{params.map{|k, v| "#{k}=#{v}"}.join("&")}"
-      conn = open(url)
-      CSV.parse(conn.read)
+      response = http_client.get(url)
+      CSV.parse(response.body)
     end
 
   end

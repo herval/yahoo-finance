@@ -1,5 +1,4 @@
 require "httpclient"
-require "open-uri"
 require "ostruct"
 require "json"
 require "cgi"

@@ -45,7 +45,8 @@ module YahooFinance
     end
 
     def read_historical(symbol, url)
-      doc = Nokogiri::HTML(open(url))
+      response = http_client.get(url)
+      doc = Nokogiri::HTML(response.body)
       rows = doc.xpath("//table")[0].css('tr')
 
       return [] if rows.empty?
