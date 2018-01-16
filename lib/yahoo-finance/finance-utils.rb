@@ -40,7 +40,8 @@ module YahooFinance
         companies = []
         next unless MARKETS[country][market]
 
-        CSV.foreach(http_client.get(MARKETS[country][market].url).body) do |row|
+        response = http_client.get(MARKETS[country][market].url)
+        CSV.parse(response.body) do |row|
           next if row.first == "Symbol"
           companies << map_company(row, market)
         end
@@ -61,7 +62,8 @@ module YahooFinance
       symbols = []
       market = MARKETS.send(country).send(market)
       return symbols if market.nil?
-      CSV.foreach(http_client.get(market.url).body) do |row|
+      response = http_client.get(market.url)
+      CSV.parse(response.body) do |row|
         next if row.first == "Symbol"
         symbols.push(row.first.gsub(" ", ""))
       end
