@@ -13,7 +13,8 @@ module YahooFinance
     def symbols(query)
       read_symbols(query).map { |row| OpenStruct.new(row) }
     end
-
+    
+    alias query symbols
     private
 
     def read_symbols(query)

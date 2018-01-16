@@ -10,4 +10,22 @@ class YahooFinance::SymbolsTest < MiniTest::Test
     refute_nil symbols.first.name
   end
 
+  def test_symbols_using_real_stock_apple
+    ycl = YahooFinance::Client.new
+    symbols = ycl.symbols('apple')
+    assert_equal(10, symbols.size)
+    assert_equal "AAPL",  symbols.first.symbol
+    assert_equal "Apple Inc.", symbols.first.name
+  end
+
+  def test_symbols_is_aliased_as_query
+    ycl = YahooFinance::Client.new
+    symbols = ycl.query('apple')
+    assert_equal(10, symbols.size)
+    assert_equal "AAPL",  symbols.first.symbol
+    assert_equal "Apple Inc.", symbols.first.name
+  end
+
+  
+
 end

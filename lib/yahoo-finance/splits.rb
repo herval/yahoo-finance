@@ -8,6 +8,7 @@ module YahooFinance
 
     def splits(symbol, options = {})
       rows = read_splits(symbol, options).select { |row| row[0] == "SPLIT" }
+      byebug
       rows.map do |type, date, value|
         after, before = value.split(":")
         OpenStruct.new(symbol: symbol, date: Date.strptime(date.strip, "%Y%m%d"), before: before.to_i, after: after.to_i)
