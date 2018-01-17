@@ -16,11 +16,11 @@ Just add it to your `Gemfile`:
 
 ### Getting latest quotes for a set of symbols
 
-Pass an array of valid symbols (stock names, indexes, exchange rates) and a list of fields you want:
+Pass an array of valid symbols (stock names, indexes, exchange rates):
 
 ```ruby
 yahoo_client = YahooFinance::Client.new
-data = yahoo_client.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date])
+data = yahoo_client.quotes(["BVSP", "NATU3.SA", "USDJPY=X"])
 ```
 
 Data is now an array of results. You now have accessor methods to retrieve the data, with the return results being strings:
@@ -28,121 +28,101 @@ Data is now an array of results. You now have accessor methods to retrieve the d
 ```ruby
 puts data[0].symbol + " value is: " + data[0].ask 
 ```
-
-Passing `raw: false` will return numerical values
-
-```ruby
-yahoo_client = YahooFinance::Client.new
-data = yahoo_client.quotes(["BVSP", "NATU3.SA", "USDJPY=X"], [:ask, :bid, :last_trade_date], { raw: false } )
-data[0].ask # This is now a BigDecimal
-```
-
 Passing `na_as_nil: true` will convert "N/A" responses to `nil`
 
 ```ruby
 yahoo_client = YahooFinance::Client.new
-
-data = yahoo_client.quotes(["BVSP"], [:ask] )
+data = yahoo_client.quotes(["BVSP"])
 data[0].ask
 > "N/A"
 
-data = yahoo_client.quotes(["BVSP"], [:ask], { na_as_nil: true } )
+data = yahoo_client.quotes(["BVSP"], { na_as_nil: true } )
 data[0].ask
 > nil
 ```
 
-The full list of fields follows:
+The full list of fields with values follows:
 
 ```ruby
-     :after_hours_change_real_time
-     :annualized_gain 
-     :ask
-     :ask_real_time
-     :ask_size
-     :average_daily_volume
-     :bid
-     :bid_real_time
-     :bid_size
-     :book_value
-     :change
-     :change_and_percent_change
-     :change_from_200_day_moving_average 
-     :change_from_50_day_moving_average 
-     :change_from_52_week_high 
-     :change_From_52_week_low 
-     :change_in_percent 
-     :change_percent_realtime 
-     :change_real_time
-     :close 
-     :comission
-     :day_value_change 
-     :day_value_change_realtime 
-     :days_range
-     :days_range_realtime 
-     :dividend_pay_date 
-     :dividend_per_share
-     :dividend_yield
-     :earnings_per_share
-     :ebitda 
-     :eps_estimate_current_year 
-     :eps_estimate_next_quarter 
-     :eps_estimate_next_year 
-     :error_indicator 
-     :ex_dividend_date
-     :float_shares 
-     :high 
-     :high_52_weeks 
-     :high_limit 
-     :holdings_gain 
-     :holdings_gain_percent 
-     :holdings_gain_percent_realtime 
-     :holdings_gain_realtime 
-     :holdings_value 
-     :holdings_value_realtime 
-     :last_trade_date
-     :last_trade_price
-     :last_trade_realtime_withtime 
-     :last_trade_size 
-     :last_trade_time 
-     :last_trade_with_time 
-     :low 
-     :low_52_weeks 
-     :low_limit 
-     :market_cap_realtime 
-     :market_capitalization 
-     :more_info 
-     :moving_average_200_day 
-     :moving_average_50_day 
-     :name 
-     :notes 
-     :one_year_target_price 
-     :open 
-     :order_book 
-     :pe_ratio 
-     :pe_ratio_realtime 
-     :peg_ratio 
-     :percent_change_from_200_day_moving_average 
-     :percent_change_from_50_day_moving_average 
-     :percent_change_from_52_week_high 
-     :percent_change_from_52_week_low 
-     :previous_close 
-     :price_eps_estimate_current_year 
-     :price_eps_Estimate_next_year 
-     :price_paid 
-     :price_per_book 
-     :price_per_sales 
-     :revenue
-     :shares_outstanding
-     :shares_owned 
-     :short_ratio 
-     :stock_exchange 
-     :symbol 
-     :ticker_trend 
-     :trade_date
-     :trade_links 
-     :volume
-     :weeks_range_52 
+  language                          = "en-US"
+  quoteType                         = "EQUITY"
+  quoteSourceName                   = "Nasdaq Real Time Price"
+  currency                          = "USD"
+  esgPopulated                      = false
+  tradeable                         = true
+  bid                               = 175.82
+  ask                               = 175.84
+  bidSize                           = 1
+  askSize                           = 10
+  messageBoardId                    = "finmb_24937"
+  fullExchangeName                  = "NasdaqGS"
+  longName                          = "Apple Inc."
+  financialCurrency                 = "USD"
+  averageDailyVolume3Month          = 26971341
+  averageDailyVolume10Day           = 22001080
+  fiftyTwoWeekLowChange             = 57.97
+  fiftyTwoWeekLowChangePercent      = 0.49035698
+  fiftyTwoWeekHighChange            = -3.199997
+  fiftyTwoWeekHighChangePercent     = -0.017838212
+  fiftyTwoWeekLow                   = 118.22
+  fiftyTwoWeekHigh                  = 179.39
+  dividendDate                      = 1510790400
+  earningsTimestamp                 = 1517518800
+  earningsTimestampStart            = 1517259600
+  earningsTimestampEnd              = 1517605200
+  trailingAnnualDividendRate        = 2.4
+  trailingPE                        = 19.130293
+  exchangeDataDelayedBy             = 0
+  trailingAnnualDividendYield       = 0.013692379
+  epsTrailingTwelveMonths           = 9.21
+  epsForward                        = 12.22
+  sharesOutstanding                 = 5087059968
+  bookValue                         = 26.149
+  fiftyDayAverage                   = 172.5509
+  fiftyDayAverageChange             = 3.6390991
+  fiftyDayAverageChangePercent      = 0.021090003
+  twoHundredDayAverage              = 161.8961
+  twoHundredDayAverageChange        = 14.2939
+  twoHundredDayAverageChangePercent = 0.08829057
+  marketCap                         = 896289079296
+  forwardPE                         = 14.418167
+  priceToBook                       = 6.737925
+  sourceInterval                    = 15
+  exchangeTimezoneName              = "America/New_York"
+  exchangeTimezoneShortName         = "EST"
+  gmtOffSetMilliseconds             = -18000000
+  regularMarketPrice                = 176.19
+  regularMarketTime                 = 1516136401
+  regularMarketChange               = -0.8999939
+  regularMarketOpen                 = 177.9
+  regularMarketDayHigh              = 179.39
+  regularMarketDayLow               = 176.14
+  regularMarketVolume               = 25789935
+  market                            = "us_market"
+  exchange                          = "NMS"
+  shortName                         = "Apple Inc."
+  priceHint                         = 2
+  postMarketChangePercent           = -0.23837797
+  postMarketTime                    = 1516146013
+  postMarketPrice                   = 175.77
+  postMarketChange                  = -0.41999817
+  regularMarketChangePercent        = -0.50821275
+  regularMarketPreviousClose        = 175.28
+  marketState                       = "POST"
+  symbol                            = "AAPL"
 ```
+
+### Stock Suggestion by query
+
+Create a YahooFinance::Client instance
+
+```ruby
+yahoo_client = YahooFinance::Client.new
+yahoo_client.query('Apple') 
+```
+This method returns an array of quotes based on the entered query. 
+
+*For backwards compatibility this can also be called using yahoo_client.symbols(query)
 
 ### Getting symbols by stock market (beta)
 
@@ -279,6 +259,4 @@ data[0].date   # Date<2014-06-09>
 data[0].before # 1
 data[0].after  # 7
 ```
-
-
 Enjoy! :-)
