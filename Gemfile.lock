@@ -2,9 +2,9 @@ GEM
   remote: https://rubygems.org/
   specs:
     json (1.8.2)
-    mini_portile2 (2.1.0)
-    nokogiri (1.6.8.1)
-      mini_portile2 (~> 2.1.0)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.8)
+      mini_portile2 (~> 2.4.0)
     power_assert (0.2.6)
     rake (10.4.2)
     test-unit (3.1.5)
