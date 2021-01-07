@@ -16,6 +16,6 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency("fastercsv") if RUBY_VERSION < "1.9"
   s.add_dependency 'json'
   s.add_development_dependency 'bundler', '~> 1.10'
-  s.add_development_dependency 'rake', '~> 10.0'
+  s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'test-unit'
 end
